@@ -1,0 +1,12 @@
+[
+  {
+    "external_order_id": "ORD-2026-0003",
+    "customer_name": "Anna Nowak",
+    "items": [{ "sku": "KEY-001", "quantity": 3 }]
+  },
+  {
+    "external_order_id": "ORD-2026-0004",
+    "customer_name": "Anna Nowak",
+    "items": [{ "sku": "NOPE-999", "quantity": 1 }]
+  }
+]
