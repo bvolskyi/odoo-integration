@@ -31,7 +31,7 @@ services:
       - "127.0.0.1:5433:5432"
     volumes:
       - staging-db-data:/var/lib/postgresql/data
-      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+      - ./sql:/docker-entrypoint-initdb.d:ro
 
 volumes:
   odoo-db-data:
