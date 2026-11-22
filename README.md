@@ -38,3 +38,36 @@ python3 -m venv venv && source venv/bin/activate
 pip install requests python-dotenv psycopg2-binary
 python src/test_odoo_connection.py
 ```
+
+## Usage
+
+Run the scripts in this order from the project folder, with the virtual
+environment active and the containers running.
+
+1. Copy the product list from Odoo into the staging database.
+2. Load orders from a JSON file, check them and store them.
+3. Send the valid orders to Odoo.
+
+```bash
+python src/sync_products.py
+python src/ingest.py data/sample_order.json
+python src/sync.py
+```
+
+Running any step twice is safe. The same order is never created twice in
+Odoo, because every order carries its external number into Odoo and the
+script checks for it first.
+
+## How orders move through the staging table
+
+- VALID: the order passed all checks and waits to be sent.
+- INVALID: the order failed a check. The reason is saved with the order. If a
+  corrected version is loaded later, it replaces the invalid one.
+- SENT: the order exists in Odoo.
+- FAILED: sending did not work. Network problems are tried again, up to three
+  times in total. Other problems are not retried because they need new data.
+
+An order with a problem in any line is rejected as a whole. We do not send
+half an order.
+
+Every important step is written to the sync_log table.
